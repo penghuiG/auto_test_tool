@@ -9,7 +9,7 @@ gl_status_t adb_shell_cmd(char * adb_cmd,adb_operation_t adb_operation)
 {
     
     char cmd[ADB_CMD_LENGTH] = {0};
-    gl_status_t adb_result = STATE_FAIL;
+    gl_status_t adb_result = GL_STATE_FAIL;
     char out[ADB_CMD_OUT_LENGTH] = {0};
     FILE *fp = NULL;
     int i =0,err_num = 0,is_cmd_ok = 0;
@@ -18,16 +18,15 @@ gl_status_t adb_shell_cmd(char * adb_cmd,adb_operation_t adb_operation)
     printf("%s\n",cmd);
     fp = popen(cmd,"r");
     //如果adb shell不成功,就进不了下面这个while
-    while(fgets(out,ADB_CMD_OUT_LENGTH,fp) > (char*)0)
+    while (fgets(out,ADB_CMD_OUT_LENGTH,fp) > (char*)0)
     {   
         ++is_cmd_ok;
         
-        // printf("%s",process_name[i-1]);
-        if(PROCESS_QUERY == adb_operation)
+        if (PROCESS_QUERY == adb_operation)
         {
             adb_result = process_query_func(out);
             /* 错了之后的处理逻辑 */
-            if(adb_result != STATE_OK)
+            if (adb_result != GL_STATE_OK)
             {
                 ++err_num;
                 strcpy(process_info.process_name[process_info.err_process_num++],out);
@@ -37,46 +36,49 @@ gl_status_t adb_shell_cmd(char * adb_cmd,adb_operation_t adb_operation)
         memset(out,0,ADB_CMD_OUT_LENGTH);
     }    
     pclose(fp);
-    if(err_num && is_cmd_ok)
+    if (err_num && is_cmd_ok)
     {
-        return PROCESS_QUERY_ERR;
+        adb_result = GL_PROCESS_QUERY_ERR;
     }
-    if(!err_num && is_cmd_ok)
+    if (!err_num && is_cmd_ok)
     {
-        return STATE_OK;
+        adb_result = GL_STATE_OK;
     }
-    return STATE_FAIL;
+    return adb_result;
 }
 
 static gl_status_t process_query_func(char *input)
 {
     char * p;
     char temp[128] = {0};
-    int adb_result = -1;
+    int adb_result = 0;
     char haha[256] = {0};
     int err_num = 0;
     p = input;memset(temp,0,strlen(temp));
-    for(int j=0;j<strlen(input);j++)
+    for (int j=0;j<strlen(input);j++)
     {
-        if(input[j] != '\n')temp[j] = input[j]; 
+        if (input[j] != '\n')temp[j] = input[j]; 
     }
-    // printf("%s\n",temp);
     sprintf(haha,"adb shell \"ps -ef|grep /oemapp/bin/%s|grep -v grep\"",temp);
-    // printf("%s\n",haha);
     adb_result = system(haha);
-    if(adb_result == 256)
+    if (adb_result == 256)
     {
         log_error("%s is not started\n",temp);
         ++err_num;
     }
     else
     {}
-    if(err_num)
-        return PROCESS_QUERY_ERR;
-    return STATE_OK;
-    // printf("-------------%d-------------\n",adb_result);
+    if (err_num)
+    {
+        return GL_PROCESS_QUERY_ERR;
+    }
+    return GL_STATE_OK;
 }
 
+adb_dev::adb_dev()
+{
+    adb_connected_flag = false;
+}
 bool adb_dev::connect(int timeout)
 {
     bool connect_status = false;
@@ -100,29 +102,38 @@ bool adb_dev::connect(int timeout)
     }
     return connect_status;
 }
+bool adb_dev::get_adb_connect_status()
+{
+    if (0 == system("adb root"))
+    {
+        adb_connected_flag = true;
+        return true;
+    }
+    adb_connected_flag = false;
+    return false;
+}
+
 bool adb_dev::is_connect()
 {
     return adb_connected_flag;
 }
-adb_dev::adb_dev()
-{
-    adb_connected_flag = false;
-}
+
+
 int adb_dev::edl_enter()
 {
     bool adb_connected_flag = false;
     adb_connected_flag = connect(30);
-    if(!adb_connected_flag )
+    if (!adb_connected_flag )
     {
         return -1;
     }
     sleep(15);
-    if(system("adb shell \"reboot edl\"") == 0)
+    if (system("adb shell \"reboot edl\"") == 0)
     {
         log_debug("adb shell \"reboot edl\"");
     }
     sleep(30);
-    if(system("lsusb |grep 9008") == 0)
+    if (system("lsusb |grep 9008") == 0)
     {
         log_debug("Successfully entered 9008 mode");
         return 0;
@@ -133,9 +144,9 @@ int adb_dev::edl_out()
 {
     int counter = 30;
     power_restart();
-     while(--counter)
+    while (--counter)
     {
-        if(system("adb root") == 0)
+        if (system("adb root") == 0)
         {
             return 0;
         }

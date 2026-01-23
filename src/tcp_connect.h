@@ -1,5 +1,4 @@
-#ifndef TCP_CONNECT_H_
-#define TCP_CONNECT_H_
+#pragma once
 
 #include <iostream>
 #include <string>
@@ -28,4 +27,3 @@ void recive_handle(const int sockefd);
 int connect_to_server(const char* serverIp, int serverPort); 
 bool check_connection(int socket_fd);
 void monitor_and_reconnect();
-#endif // !TCP_CONNECT_H_

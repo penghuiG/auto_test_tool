@@ -20,6 +20,8 @@ public:
         power_gpio_set(1,1,1,1);
     }
     bool connect(int timeout);
+    //获取adb连接状态
+    bool get_adb_connect_status();
     bool is_connect();
     int edl_enter();
     int edl_out();

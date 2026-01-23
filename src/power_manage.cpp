@@ -81,7 +81,7 @@ gl_status_t low_power_test()
         if(timer ++ > 40)
         {
             log_error("The tsu timeout is not started");
-            return STATE_FAIL;
+            return GL_STATE_FAIL;
             
         }
     }
@@ -101,7 +101,7 @@ gl_status_t low_power_test()
         {
             log_error("Enter the low-power timeout\n");
 
-            return SLEEP_FAIL;
+            return GL_SLEEP_FAIL;
         }
     }
     timer = 0;
@@ -120,12 +120,12 @@ gl_status_t low_power_test()
         if(timer ++ > 5)
         {
             log_error("Failed to exit the low-power consumption\n");
-             return WEAKUP_FAIL;
+             return GL_WEAKUP_FAIL;
         }
         
     }
     log_debug("low power mode test success\n");
-    return STATE_OK;
+    return GL_STATE_OK;
 }
 // #define GPIO_B    25
 // #define GPIO_IG   24
@@ -149,7 +149,7 @@ gl_status_t is_lpm_status()
     // std::cout << moving_curent << "ma" << std::endl;
     if(moving_curent <= 5.0)
     {
-        return STATE_OK;
+        return GL_STATE_OK;
     }
-    return STATE_FAIL;
+    return GL_STATE_FAIL;
 }

@@ -1,5 +1,4 @@
-#ifndef LOG_H_
-#define LOG_H_
+#pragma once
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -29,4 +28,3 @@ void log_internal(LogLevel level, const char *format, ...) ;
 #define log_warn(fmt, ...)    log_internal(LOG_WARN, fmt, ##__VA_ARGS__)
 #define log_error(fmt, ...)   log_internal(LOG_ERROR, fmt, ##__VA_ARGS__)
 
-#endif

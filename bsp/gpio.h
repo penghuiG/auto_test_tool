@@ -1,5 +1,4 @@
-#ifndef GPIO_H_
-#define GPIO_H_
+#pragma once
 #include <string.h>
 #include <wiringPi.h>
 
@@ -25,4 +24,3 @@
 void gpio_write(int pin,int val);
 void power_manage_init();
 void power_gpio_set(int bat,int ig,int acc,int usb);
-#endif

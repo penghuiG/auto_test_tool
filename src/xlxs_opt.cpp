@@ -89,22 +89,22 @@ gl_status_t lpm_judgment(int row)
     int time_out = get_int_from_xlxs(row, config_col::TIMEOUT_COL);
     while (--time_out)
     {
-        if(is_lpm_status() == STATE_OK) {
+        if(is_lpm_status() == GL_STATE_OK) {
             std::cout << "Successfully entered low-power mode" << std::endl;
             break;
         }
         sleep(1);
     }
 
-    return STATE_OK;
+    return GL_STATE_OK;
 }
 
 gl_status_t lpm_out(int row) {
-    gl_status_t ret = STATE_OK;
+    gl_status_t ret = GL_STATE_OK;
     int time_out = get_int_from_xlxs(row, config_col::TIMEOUT_COL);
     adb_dev adb;
     if (!adb.connect(time_out)){
-        ret = STATE_FAIL;
+        ret = GL_STATE_FAIL;
         std::cout << "Failed to successfully exit low-power mode" << std::endl;
     } else {
         std::cout << "Successfully to successfully exit low-power mode" << std::endl;
@@ -113,14 +113,14 @@ gl_status_t lpm_out(int row) {
 }
 
 gl_status_t adb_connect(int row) {
-    gl_status_t ret = STATE_OK;
+    gl_status_t ret = GL_STATE_OK;
     int time_out = get_int_from_xlxs(row, config_col::TIMEOUT_COL);
     std::cout << "out time :" << time_out << std::endl;
     adb_dev adb;
     int is_connected = adb.connect(time_out);
     if (!is_connected) {
         std::cout << "Adb connection failed" << std::endl;
-        ret = STATE_FAIL;
+        ret = GL_STATE_FAIL;
     }
     
     return ret;
@@ -128,7 +128,7 @@ gl_status_t adb_connect(int row) {
 
 gl_status_t wait_for_some_time(int row)
 {
-    gl_status_t ret = STATE_OK;
+    gl_status_t ret = GL_STATE_OK;
     int time = get_int_from_xlxs(row, config_col::TIMEOUT_COL);
     sleep(time);
     return ret;
@@ -136,7 +136,7 @@ gl_status_t wait_for_some_time(int row)
 
 gl_status_t pwr_gpio_ctr(std::string gpio, std::string sta, int row)
 {
-    gl_status_t status = STATE_FAIL;
+    gl_status_t status = GL_STATE_FAIL;
     int gpio_sta = sta.find("ON") != std::string::npos ? GPIO_OFF : GPIO_ON;//如果OFF，继电器置位，断开电源
     if (gpio.find(pwr_command::BAT) != std::string::npos) {
         gpio_write(GPIO_B, gpio_sta);
@@ -177,7 +177,7 @@ gl_status_t power_callback(std::string& ct, int row)
         
         pwr_gpio_ctr(gpio_name, target, row);
     // }
-    return STATE_OK;
+    return GL_STATE_OK;
 }
 
 gl_status_t command_callback(std::string& ct, int row)
@@ -206,18 +206,18 @@ gl_status_t command_callback(std::string& ct, int row)
             if (get_str.find(expected) != std::string::npos) {
                 std::cout << "return string: " << get_str<<std::endl;
                 std::cout << "exptcted: " << expected << std::endl;
-                return STATE_OK;
+                return GL_STATE_OK;
             }
             else {
-                return STATE_FAIL;
+                return GL_STATE_FAIL;
             }
         }
             
         } catch (const std::exception& e) {
             std::cout << (std::string("Instruction execution failed: ") + e.what()) << std::endl;
-            return STATE_FAIL;
+            return GL_STATE_FAIL;
     }
-    return STATE_OK;
+    return GL_STATE_OK;
 }
 
 gl_status_t flow_execute() {
@@ -245,7 +245,7 @@ gl_status_t flow_execute() {
         // std::cout << command_type << std::endl;
         sleep(1);
     }
-    return STATE_OK;
+    return GL_STATE_OK;
 }
 
 void ReadWithOpenXLSX() {

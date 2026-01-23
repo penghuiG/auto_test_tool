@@ -1,6 +1,4 @@
-#ifndef COMMON_H_
-#define COMMON_H_
-
+#pragma once
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -13,18 +11,18 @@
 #define info_printf(msg,arg ...)  test_info_fprintf((char*)msg,## arg)
 enum gl_status_t
 {
-    STATE_OK,
-    STATE_FAIL,
-    NO_STARTUP,
-    SLEEP_FAIL,
-    WEAKUP_FAIL,
-    KEEP_ERR,
-    CURRENT_LOW,
-    TIMEOUT_ERR,
-    SINGLE_ERR,
-    ADB_CON_ERR,
-    PROCESS_QUERY_ERR,
-    DIAL_ERR
+    GL_STATE_OK,
+    GL_STATE_FAIL,
+    GL_NO_STARTUP,
+    GL_SLEEP_FAIL,
+    GL_WEAKUP_FAIL,
+    GL_KEEP_ERR,
+    GL_CURRENT_LOW,
+    GL_TIMEOUT_ERR,
+    GL_SINGLE_ERR,
+    GL_ADB_CON_ERR,
+    GL_PROCESS_QUERY_ERR,
+    GL_DIAL_ERR
 } ;
 
 typedef struct _test_info_t
@@ -57,4 +55,3 @@ extern test_info_t test_info;
 
 void log_clear();
 int test_info_fprintf(char *msg,...);
-#endif

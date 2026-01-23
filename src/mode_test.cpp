@@ -18,7 +18,7 @@ static gl_status_t popen_data_get(std::string cmd)
          log_debug("%s",buffer);
     }
     pclose(fp);
-    return STATE_OK;
+    return GL_STATE_OK;
 }
 /*time sync*/
 gl_status_t timing_test()
@@ -30,11 +30,11 @@ gl_status_t timing_test()
     if (system(cmd.c_str()))
     {
         log_error("/tmp/ql_time_sync_record_flag not exit");
-        return STATE_FAIL;
+        return GL_STATE_FAIL;
     }
 
     popen_data_get(cmd);
-    return STATE_OK;
+    return GL_STATE_OK;
 }
 /*REFLASH*/
 gl_status_t reflash_test()
@@ -43,10 +43,10 @@ gl_status_t reflash_test()
     if(system("adb shell \"ls /proc/recoveryinfo\"") != 0)
     {
         log_error("tsu_reflash err");
-        return STATE_FAIL;
+        return GL_STATE_FAIL;
     }
     log_debug("Reflash test successful");
-    return STATE_OK;
+    return GL_STATE_OK;
 }
 
 /*DAQ*/
@@ -56,7 +56,7 @@ gl_status_t daq_test()
     if(system("adb shell \"ps | grep oemapp/bin/daq | grep -v grep\""))
     {
         log_error("DAQ No startup");
-        return STATE_FAIL;
+        return GL_STATE_FAIL;
     }
     if(system("adb shell \"ls -l /usrdata/sqlite/daq_applied.db\""))
     {
@@ -72,12 +72,12 @@ gl_status_t daq_test()
         if(system("adb shell \"ls -l /usrdata/sqlite/upload/ |grep .EOF\""))
         {
             log_error("DAQ is not working properly");
-            return STATE_FAIL;
+            return GL_STATE_FAIL;
         }
     }
 
     log_debug("DAQ test successful");
-    return STATE_OK;
+    return GL_STATE_OK;
 }
 /*ecall*/
 gl_status_t ecall_test()
@@ -93,10 +93,10 @@ gl_status_t ecall_test()
     {
         pclose(f);
         log_error("Unable to obtain ecall version");
-        return STATE_FAIL;
+        return GL_STATE_FAIL;
     }
     pclose(f);
-    return STATE_OK;
+    return GL_STATE_OK;
 }
 /*cellular*/
 gl_status_t cellular_test()
@@ -107,7 +107,7 @@ gl_status_t cellular_test()
     if(system("adb shell \"ps | grep oemapp/bin/cellular | grep -v grep\""))
     {
         log_error("cellular No startup");
-        return STATE_FAIL;
+        return GL_STATE_FAIL;
     }
 
     fp = popen("adb shell \"cat /usrdata/conf/tsu_part_num.txt\"","r");
@@ -117,14 +117,14 @@ gl_status_t cellular_test()
         if(strncmp("8B100-3BWT-COMM-M1",buf,sizeof("8B100-3BWT-COMM-M1")-1))
         {
             log_error("cat tsu_part_num.txt err != 8B100-3BWT-COMM-M1");
-            return STATE_FAIL;
+            return GL_STATE_FAIL;
         }
     }
 
     if(system("adb shell \"ifconfig | grep rmnet_data\""))
     {
         log_error("The dial status is wrong");
-        return STATE_FAIL;
+        return GL_STATE_FAIL;
     }
 
     memset(buf,0,sizeof(buf));
@@ -151,5 +151,5 @@ gl_status_t cellular_test()
 
     pclose(fp);
     log_debug("cellular test successful");
-    return STATE_OK;
+    return GL_STATE_OK;
 }

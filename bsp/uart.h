@@ -1,5 +1,4 @@
-#ifndef UARTH_H_
-#define UARTH_H_
+#pragma once
 
 
 #include <wiringSerial.h>
@@ -25,4 +24,3 @@ private:
 
 int uart_init(char * dev);
 void uartHandler(int uart_fd);
-#endif
