@@ -19,7 +19,8 @@ public:
     int uart_init();
     int uart_init(std::string dev);
     int uart_init(char* dev);
-    
+private:
+    int baud_rate;
 };
 
 int uart_init(char * dev);

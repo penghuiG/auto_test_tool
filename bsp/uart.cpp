@@ -149,6 +149,7 @@ void uartHandler(int uart_fd)
 }
 uart_dev::uart_dev()
 {
+  baud_rate = 115200;
   fd = -1;
 }
 
@@ -180,11 +181,12 @@ int uart_dev::get_dev_name_by_id()
   pclose(f);
   return 0;
 }
+
 int uart_dev::uart_init()
 {
   int uart_fd = -1;
   std::cout << "uart name: " << dev_name << std::endl;
-  if((uart_fd=serialOpen(dev_name.c_str(),38400))<0)
+  if((uart_fd=serialOpen(dev_name.c_str(),baud_rate))<0)
   { 
     log_debug("Serial port initialization failed\n");
     return -1;

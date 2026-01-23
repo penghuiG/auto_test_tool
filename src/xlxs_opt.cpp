@@ -1,5 +1,6 @@
 #include "xlxs_opt.h"
 #include "gpio.h"
+#include "adb.h"
 #define CONFIG_XLXS_PATH "/home/cx/version_base_test/conf/config.xlsx"
 
 struct pwr_command {
@@ -9,6 +10,10 @@ struct pwr_command {
     static inline const std::string V_BUS = "v_bus";
     
     static inline const std::string LPM = "lpm";
+    static inline const std::string LPM_OUT = "lpm_out";
+
+    static inline const std::string ADB_CON = "adb_connect";
+    static inline const std::string SLEEP = "sleep";
 };
 
 struct pwr_target {
@@ -77,17 +82,58 @@ int get_int_from_xlxs (int row, config_col col) {
     }
     return cell_int;
 }
+
 gl_status_t lpm_judgment(int row)
 {
-    int time_out = get_int_from_xlxs(3, config_col::TIMEOUT_COL);
-    // while () {
-        
-    // } 
-    std::cout << time_out << std::endl;
-
+    
+    int time_out = get_int_from_xlxs(row, config_col::TIMEOUT_COL);
+    while (--time_out)
+    {
+        if(is_lpm_status() == STATE_OK) {
+            std::cout << "Successfully entered low-power mode" << std::endl;
+            break;
+        }
+        sleep(1);
+    }
 
     return STATE_OK;
 }
+
+gl_status_t lpm_out(int row) {
+    gl_status_t ret = STATE_OK;
+    int time_out = get_int_from_xlxs(row, config_col::TIMEOUT_COL);
+    adb_dev adb;
+    if (!adb.connect(time_out)){
+        ret = STATE_FAIL;
+        std::cout << "Failed to successfully exit low-power mode" << std::endl;
+    } else {
+        std::cout << "Successfully to successfully exit low-power mode" << std::endl;
+    }
+    return ret;
+}
+
+gl_status_t adb_connect(int row) {
+    gl_status_t ret = STATE_OK;
+    int time_out = get_int_from_xlxs(row, config_col::TIMEOUT_COL);
+    std::cout << "out time :" << time_out << std::endl;
+    adb_dev adb;
+    int is_connected = adb.connect(time_out);
+    if (!is_connected) {
+        std::cout << "Adb connection failed" << std::endl;
+        ret = STATE_FAIL;
+    }
+    
+    return ret;
+}
+
+gl_status_t wait_for_some_time(int row)
+{
+    gl_status_t ret = STATE_OK;
+    int time = get_int_from_xlxs(row, config_col::TIMEOUT_COL);
+    sleep(time);
+    return ret;
+}
+
 gl_status_t pwr_gpio_ctr(std::string gpio, std::string sta, int row)
 {
     gl_status_t status = STATE_FAIL;
@@ -108,6 +154,16 @@ gl_status_t pwr_gpio_ctr(std::string gpio, std::string sta, int row)
         /*低功耗判断，在超时时间之内进入低功耗模式*/
         lpm_judgment(row);
     }
+    if (gpio.find(pwr_command::LPM_OUT) != std::string::npos) {
+        lpm_out(row);
+    }
+    if (gpio.find(pwr_command::ADB_CON) != std::string::npos) {
+        adb_connect(row);
+    }
+    if (gpio.find(pwr_command::SLEEP) != std::string::npos) {
+        wait_for_some_time(row);
+    }
+    
     return status;
 }
 

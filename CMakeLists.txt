@@ -7,7 +7,7 @@ include_directories(. bsp bsp/can src)
 # aux_source_directory(. SRC_LIST)
 
 add_subdirectory(/home/cx/package/OpenXLSX ${CMAKE_BINARY_DIR}/OpenXLSX-build)
-
+add_subdirectory(http_server)
 aux_source_directory(bsp/can SRC_LIST1)
 aux_source_directory(bsp SRC_LIST2)
 aux_source_directory(src SRC_LIST3)

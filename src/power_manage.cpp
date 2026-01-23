@@ -144,3 +144,12 @@ void power_restart()
     gpio_write(GPIO_USB_POWER,GPIO_OFF);
     log_debug("Power off and restart\n");
 }
+gl_status_t is_lpm_status()
+{
+    // std::cout << moving_curent << "ma" << std::endl;
+    if(moving_curent <= 5.0)
+    {
+        return STATE_OK;
+    }
+    return STATE_FAIL;
+}

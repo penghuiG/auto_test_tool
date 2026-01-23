@@ -174,6 +174,8 @@ exit_mcu_update:
 #include "xlxs_opt.h"
 int main()
 {
+    std::thread curetn_thread(get_curent_hander);
+    curetn_thread.detach();
     power_manage_init();
     ReadWithOpenXLSX();
 }

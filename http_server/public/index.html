@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>树莓派文件管理</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #6a11cb 0%, #727780 100%);
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .container {
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            animation: fadeInDown 1s ease;
+        }
+        
+        header h1 {
+            font-size: 3.5rem;
+            color: white;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+        
+        header p {
+            font-size: 1.5rem;
+            color: rgba(255, 255, 255, 0.9);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .profile-card {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s ease;
+        }
+        
+        .profile-card:hover {
+            transform: translateY(-10px);
+        }
+        
+        .profile-header {
+            background: linear-gradient(to right, #4776E6, #8E54E9);
+            padding: 40px 30px;
+            text-align: center;
+            color: white;
+        }
+        
+        .avatar {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            border: 5px solid rgba(255, 255, 255, 0.3);
+            object-fit: cover;
+            margin: 0 auto 20px;
+            background-color: #f0f0f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            color: #8E54E9;
+        }
+        
+        .profile-header h2 {
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+        }
+        
+        .profile-header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .profile-body {
+            padding: 30px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        
+        .section {
+            margin-bottom: 25px;
+        }
+        
+        .section h3 {
+            font-size: 1.5rem;
+            color: #4776E6;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+        
+        .info-item {
+            display: flex;
+            margin-bottom: 15px;
+        }
+        
+        .info-item i {
+            width: 30px;
+            color: #8E54E9;
+            font-size: 1.2rem;
+            margin-top: 5px;
+        }
+        
+        .skills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .skill-tag {
+            background: #f0f5ff;
+            color: #4776E6;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+        
+        .upload-section {
+            background-color: #f9f9ff;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            grid-column: 1 / -1;
+        }
+        
+        .upload-section h3 {
+            color: #4776E6;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+        
+        .target-path {
+            background-color: #eef2ff;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border-left: 5px solid #8E54E9;
+        }
+        
+        .target-path i {
+            color: #4776E6;
+            margin-right: 10px;
+        }
+        
+        .upload-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .file-input-wrapper {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .file-input-label {
+            display: block;
+            padding: 20px;
+            border: 2px dashed #8E54E9;
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background-color: #f8f9ff;
+        }
+        
+        .file-input-label:hover {
+            background-color: #eef2ff;
+            transform: translateY(-3px);
+        }
+        
+        .file-input-label i {
+            font-size: 3rem;
+            color: #8E54E9;
+            margin-bottom: 10px;
+        }
+        
+        .file-input-label span {
+            font-size: 1.2rem;
+            color: #555;
+        }
+        
+        .file-input {
+            display: none;
+        }
+        
+        .selected-file {
+            padding: 15px;
+            background-color: #f0f5ff;
+            border-radius: 10px;
+            margin-top: 10px;
+            display: none;
+        }
+        
+        .selected-file.active {
+            display: block;
+        }
+        
+        .selected-file-name {
+            font-weight: 600;
+            color: #4776E6;
+        }
+        
+        .btn {
+            display: inline-block;
+            background: linear-gradient(to right, #4776E6, #8E54E9);
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(142, 84, 233, 0.3);
+            text-align: center;
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 7px 20px rgba(142, 84, 233, 0.4);
+        }
+        
+        .btn:disabled {
+            background: #cccccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .upload-btn {
+            width: 100%;
+            padding: 15px;
+            font-size: 1.2rem;
+        }
+        
+        .status-message {
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            text-align: center;
+        }
+        
+        .status-message.success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .status-message.error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .progress-container {
+            width: 100%;
+            height: 20px;
+            background-color: #f0f0f0;
+            border-radius: 10px;
+            margin-top: 15px;
+            overflow: hidden;
+            display: none;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(to right, #4776E6, #8E54E9);
+            width: 0%;
+            transition: width 0.3s ease;
+            border-radius: 10px;
+        }
+        
+        .server-config {
+            background-color: #fff8e1;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            border-left: 5px solid #ffc107;
+        }
+        
+        .config-input {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .config-input input {
+            flex: 1;
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 1rem;
+        }
+        
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        .spinner {
+            display: inline-block;
+            animation: spin 1s linear infinite;
+            margin-right: 10px;
+        }
+        
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2.5rem;
+            }
+            
+            header p {
+                font-size: 1.2rem;
+            }
+            
+            .profile-header {
+                padding: 30px 20px;
+            }
+            
+            .avatar {
+                width: 120px;
+                height: 120px;
+                font-size: 3rem;
+            }
+            
+            .profile-body {
+                padding: 20px;
+                grid-template-columns: 1fr;
+            }
+            
+            .upload-section {
+                padding: 20px;
+            }
+            
+            .config-input {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>树莓派文件管理器</h1>
+            <p>将文件上传到树莓派配置目录</p>
+        </header>
+        
+        <main class="profile-card">
+            <div class="profile-header">
+                <div class="avatar">
+                    <i class="fas fa-raspberry-pi"></i>
+                </div>
+                <h2>Raspberry Pi 文件上传</h2>
+                <p>实时文件传输 | 配置目录: /home/cx/version_base_test/conf</p>
+            </div>
+            
+            <div class="profile-body">
+                <div class="section">
+                    <h3>系统信息</h3>
+                    <div class="info-item">
+                        <i class="fas fa-server"></i>
+                        <div>
+                            <strong>目标路径：</strong> /home/cx/version_base_test/conf
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <i class="fas fa-network-wired"></i>
+                        <div>
+                            <strong>连接状态：</strong> <span id="connectionStatus" style="color: #4CAF50;">● 就绪</span>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <i class="fas fa-info-circle"></i>
+                        <div>
+                            <strong>文件限制：</strong> 最大 100MB，支持所有文件类型
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="section">
+                    <h3>上传说明</h3>
+                    <div class="info-item">
+                        <i class="fas fa-check-circle"></i>
+                        <div>文件将直接上传到树莓派目标目录</div>
+                    </div>
+                    <div class="info-item">
+                        <i class="fas fa-check-circle"></i>
+                        <div>支持大文件上传，显示实时进度</div>
+                    </div>
+                    <div class="info-item">
+                        <i class="fas fa-check-circle"></i>
+                        <div>可自定义服务器API地址</div>
+                    </div>
+                    <div class="info-item">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <div>请确保树莓派服务器已正确配置</div>
+                    </div>
+                </div>
+                
+                <!-- 服务器配置 -->
+                <div class="server-config">
+                    <h3><i class="fas fa-cog"></i> 服务器配置</h3>
+                    <p>设置树莓派服务器的API地址：</p>
+                    <div class="config-input">
+                        <input type="text" id="serverUrl" placeholder="http://树莓派IP地址:端口/api/upload" value="http://192.168.0.5:8080">
+                        <button type="button" id="testConnection" class="btn">测试连接</button>
+                    </div>
+                    <p style="margin-top: 10px; font-size: 0.9rem; color: #666;">
+                        默认地址为 192.168.0.5:8080，请根据实际情况修改为树莓派的IP地址
+                    </p>
+                </div>
+                
+                <!-- 文件上传区域 -->
+                <div class="upload-section">
+                    <h3><i class="fas fa-upload"></i> 文件上传到配置目录</h3>
+                    
+                    <div class="target-path">
+                        <i class="fas fa-folder-open"></i>
+                        <strong>目标路径：</strong> /home/cx/version_base_test/conf
+                    </div>
+                    
+                    <form class="upload-form" id="uploadForm">
+                        <div class="file-input-wrapper">
+                            <label for="fileInput" class="file-input-label">
+                                <i class="fas fa-cloud-upload-alt"></i>
+                                <div>
+                                    <span>点击选择文件或拖放到此处</span>
+                                    <p style="margin-top: 10px; font-size: 0.9rem; color: #777;">支持单个文件上传，最大100MB</p>
+                                </div>
+                            </label>
+                            <input type="file" id="fileInput" class="file-input">
+                            
+                            <div class="selected-file" id="selectedFile">
+                                <i class="fas fa-file"></i>
+                                <span class="selected-file-name" id="selectedFileName"></span>
+                                <span id="fileSize"></span>
+                                <button type="button" id="removeFile" style="background: none; border: none; color: #ff4757; margin-left: 10px; cursor: pointer;">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- 进度条 -->
+                        <div class="progress-container" id="progressContainer">
+                            <div class="progress-bar" id="progressBar"></div>
+                        </div>
+                        
+                        <button type="submit" class="btn upload-btn" id="uploadBtn" disabled>
+                            <i class="fas fa-paper-plane"></i> 上传文件到配置目录
+                        </button>
+                    </form>
+                    
+                    <div class="status-message" id="statusMessage"></div>
+                </div>
+            </div>
+        </main>
+        
+        <footer>
+            <p>树莓派文件上传系统 © 2023 | 当前时间: <span id="currentTime"></span></p>
+        </footer>
+    </div>
+
+    <script>
+        // 显示当前时间
+        function updateTime() {
+            const now = new Date();
+            const timeString = now.toLocaleString('zh-CN', {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
+            });
+            document.getElementById('currentTime').textContent = timeString;
+        }
+        
+        setInterval(updateTime, 1000);
+        updateTime();
+        
+        // 文件上传功能
+        document.addEventListener('DOMContentLoaded', function() {
+            const fileInput = document.getElementById('fileInput');
+            const selectedFileDiv = document.getElementById('selectedFile');
+            const selectedFileName = document.getElementById('selectedFileName');
+            const fileSizeSpan = document.getElementById('fileSize');
+            const removeFileBtn = document.getElementById('removeFile');
+            const uploadBtn = document.getElementById('uploadBtn');
+            const uploadForm = document.getElementById('uploadForm');
+            const statusMessage = document.getElementById('statusMessage');
+            const progressContainer = document.getElementById('progressContainer');
+            const progressBar = document.getElementById('progressBar');
+            const serverUrlInput = document.getElementById('serverUrl');
+            const testConnectionBtn = document.getElementById('testConnection');
+            const connectionStatus = document.getElementById('connectionStatus');
+            
+            // 服务器API地址
+            let serverUrl = serverUrlInput.value;
+            
+            // 更新服务器地址
+            serverUrlInput.addEventListener('change', function() {
+                serverUrl = this.value;
+                showStatus('服务器地址已更新: ' + serverUrl, 'success');
+            });
+            
+            // 测试连接
+            testConnectionBtn.addEventListener('click', async function() {
+                if (!serverUrl) {
+                    showStatus('请输入服务器地址', 'error');
+                    return;
+                }
+                
+                testConnectionBtn.innerHTML = '<i class="fas fa-spinner spinner"></i> 测试中...';
+                testConnectionBtn.disabled = true;
+                
+                try {
+                    // 发送测试请求
+                    const response = await fetch(serverUrl.replace('/api/upload', '/api/test'), {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    });
+                    
+                    if (response.ok) {
+                        connectionStatus.innerHTML = '● 连接成功';
+                        connectionStatus.style.color = '#4CAF50';
+                        showStatus('服务器连接成功！', 'success');
+                    } else {
+                        connectionStatus.innerHTML = '● 连接失败';
+                        connectionStatus.style.color = '#FF4757';
+                        showStatus('服务器连接失败，请检查地址和网络', 'error');
+                    }
+                } catch (error) {
+                    connectionStatus.innerHTML = '● 连接失败';
+                    connectionStatus.style.color = '#FF4757';
+                    showStatus('无法连接到服务器: ' + error.message, 'error');
+                } finally {
+                    testConnectionBtn.innerHTML = '测试连接';
+                    testConnectionBtn.disabled = false;
+                }
+            });
+            
+            // 文件选择处理
+            fileInput.addEventListener('change', function() {
+                if (this.files.length > 0) {
+                    const file = this.files[0];
+                    selectedFileName.textContent = file.name;
+                    
+                    // 格式化文件大小
+                    const fileSize = file.size;
+                    let sizeText = '';
+                    if (fileSize < 1024) {
+                        sizeText = fileSize + ' bytes';
+                    } else if (fileSize < 1024 * 1024) {
+                        sizeText = (fileSize / 1024).toFixed(2) + ' KB';
+                    } else {
+                        sizeText = (fileSize / (1024 * 1024)).toFixed(2) + ' MB';
+                    }
+                    fileSizeSpan.textContent = ' (' + sizeText + ')';
+                    
+                    selectedFileDiv.classList.add('active');
+                    uploadBtn.disabled = false;
+                }
+            });
+            
+            // 移除文件
+            removeFileBtn.addEventListener('click', function() {
+                fileInput.value = '';
+                selectedFileDiv.classList.remove('active');
+                uploadBtn.disabled = true;
+                progressContainer.style.display = 'none';
+                progressBar.style.width = '0%';
+            });
+            
+            // 拖放功能
+            const dropArea = document.querySelector('.file-input-label');
+            
+            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                dropArea.addEventListener(eventName, preventDefaults, false);
+            });
+            
+            function preventDefaults(e) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+            
+            ['dragenter', 'dragover'].forEach(eventName => {
+                dropArea.addEventListener(eventName, highlight, false);
+            });
+            
+            ['dragleave', 'drop'].forEach(eventName => {
+                dropArea.addEventListener(eventName, unhighlight, false);
+            });
+            
+            function highlight() {
+                dropArea.style.backgroundColor = '#e6eeff';
+                dropArea.style.borderColor = '#4776E6';
+            }
+            
+            function unhighlight() {
+                dropArea.style.backgroundColor = '#f8f9ff';
+                dropArea.style.borderColor = '#8E54E9';
+            }
+            
+            dropArea.addEventListener('drop', handleDrop, false);
+            
+            function handleDrop(e) {
+                const dt = e.dataTransfer;
+                const files = dt.files;
+                
+                if (files.length > 0) {
+                    fileInput.files = files;
+                    fileInput.dispatchEvent(new Event('change'));
+                }
+            }
+            
+            // 实际文件上传
+            uploadForm.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                if (!fileInput.files.length) {
+                    showStatus('请先选择要上传的文件', 'error');
+                    return;
+                }
+                
+                const file = fileInput.files[0];
+                const maxSize = 100 * 1024 * 1024; // 100MB
+                
+                if (file.size > maxSize) {
+                    showStatus('文件大小不能超过100MB', 'error');
+                    return;
+                }
+                
+                if (!serverUrl) {
+                    showStatus('请先设置服务器地址', 'error');
+                    return;
+                }
+                
+                // 开始上传
+                uploadBtn.innerHTML = '<i class="fas fa-spinner spinner"></i> 上传中...';
+                uploadBtn.disabled = true;
+                progressContainer.style.display = 'block';
+                progressBar.style.width = '0%';
+                
+                // 清空状态消息
+                statusMessage.className = 'status-message';
+                statusMessage.style.display = 'none';
+                
+                try {
+                    // 创建FormData对象
+                    const formData = new FormData();
+                    formData.append('file', file);
+                    formData.append('targetPath', '/home/cx/version_base_test/conf');
+                    formData.append('timestamp', new Date().toISOString());
+                    
+                    // 使用XMLHttpRequest来获得上传进度
+                    const xhr = new XMLHttpRequest();
+                    
+                    // 上传进度事件
+                    xhr.upload.addEventListener('progress', function(e) {
+                        if (e.lengthComputable) {
+                            const percentComplete = Math.round((e.loaded / e.total) * 100);
+                            progressBar.style.width = percentComplete + '%';
+                            
+                            if (percentComplete === 100) {
+                                uploadBtn.innerHTML = '<i class="fas fa-spinner spinner"></i> 处理中...';
+                            }
+                        }
+                    });
+                    
+                    // 请求完成
+                    xhr.addEventListener('load', function() {
+                        if (xhr.status === 200) {
+                            try {
+                                const response = JSON.parse(xhr.responseText);
+                                if (response.success) {
+                                    showStatus(`文件 "${file.name}" 已成功上传到 ${response.path || '/home/cx/version_base_test/conf'}`, 'success');
+                                    
+                                    // 重置表单
+                                    fileInput.value = '';
+                                    selectedFileDiv.classList.remove('active');
+                                    progressContainer.style.display = 'none';
+                                } else {
+                                    showStatus(`上传失败: ${response.message || '服务器处理错误'}`, 'error');
+                                }
+                            } catch (e) {
+                                showStatus('上传成功，但服务器响应格式错误', 'success');
+                                // 重置表单
+                                fileInput.value = '';
+                                selectedFileDiv.classList.remove('active');
+                                progressContainer.style.display = 'none';
+                            }
+                        } else {
+                            showStatus(`上传失败: 服务器返回状态码 ${xhr.status}`, 'error');
+                        }
+                        
+                        uploadBtn.innerHTML = '<i class="fas fa-paper-plane"></i> 上传文件到配置目录';
+                        uploadBtn.disabled = false;
+                    });
+                    
+                    // 请求错误
+                    xhr.addEventListener('error', function() {
+                        showStatus('上传失败: 网络错误，请检查服务器连接', 'error');
+                        uploadBtn.innerHTML = '<i class="fas fa-paper-plane"></i> 上传文件到配置目录';
+                        uploadBtn.disabled = false;
+                        progressContainer.style.display = 'none';
+                    });
+                    
+                    // 发送请求
+                    xhr.open('POST', serverUrl);
+                    xhr.send(formData);
+                    
+                } catch (error) {
+                    showStatus('上传失败: ' + error.message, 'error');
+                    uploadBtn.innerHTML = '<i class="fas fa-paper-plane"></i> 上传文件到配置目录';
+                    uploadBtn.disabled = false;
+                    progressContainer.style.display = 'none';
+                }
+            });
+            
+            function showStatus(message, type) {
+                statusMessage.textContent = message;
+                statusMessage.className = 'status-message ' + type;
+                statusMessage.style.display = 'block';
+                
+                // 5秒后自动隐藏消息
+                setTimeout(() => {
+                    statusMessage.style.display = 'none';
+                }, 5000);
+            }
+            
+            // 初始化服务器地址
+            // 尝试自动获取当前主机的IP地址
+            function getServerIP() {
+                // 这里可以添加逻辑来自动获取服务器IP
+                // 目前使用默认的localhost:3000
+                return '192.168.0.5:8080';
+            }
+        });
+    </script>
+</body>
+</html>
