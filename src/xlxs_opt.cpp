@@ -1,7 +1,7 @@
 #include "xlxs_opt.h"
 #include "gpio.h"
 #include "adb.h"
-#define CONFIG_XLXS_PATH "/home/cx/version_base_test/conf/config.xlsx"
+#define CONFIG_XLXS_PATH "/home/cx/auto_test_test/conf/config.xlsx"
 
 struct pwr_command {
     static inline const std::string BAT = "bat";

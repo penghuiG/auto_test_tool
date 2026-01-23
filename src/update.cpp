@@ -168,7 +168,7 @@ int mcu_update_t::update()
 int mcu_update_t::clear_mcu_ver_file()
 {
     // int ret;
-    if(system("rm /home/cx/version_base_test/mcu_ver_file -rf") != 0)
+    if(system("rm /home/cx/auto_test_test/mcu_ver_file -rf") != 0)
     {
         return -1;
     }
@@ -206,7 +206,7 @@ std::string mcu_update_t::check_mcu_new_ver()
     
     pclose(f);
     
-    FILE* f1 = popen("ls /home/cx/version_base_test/mcu_ver_file/ |awk -F'_' '{print $1}'","r");
+    FILE* f1 = popen("ls /home/cx/auto_test_test/mcu_ver_file/ |awk -F'_' '{print $1}'","r");
     
     if(fgets(local_ver,sizeof(local_ver),f1) > (char*)0)
     {
@@ -234,7 +234,7 @@ int mcu_update_t::download_mcu_new_ver()
     // std::cout<< "The current latest version is:" << mcu_ver_num;
     //svn checkout --username guopenghui --password CX.gph2024 "https://192.168.52.21/svn/Global5.0/9.baseline/MCU/03.For3BWT/For%20JP/G26V0.J02.23-B/" ./mcu_ver_file/
     // sprintf(cmd,"svn checkout --username guopenghui --password CX.gph2024 \"https://192.168.52.21/svn/Global5.0/9.baseline/MCU/03.For3BWT/For%20JP/%s\" ./mcu_ver_file/",mcu_ver_num.c_str());
-    sprintf(cmd,"svn checkout --username guopenghui --password CX.gph2024 \"%s%s/%s\" /home/cx/version_base_test/mcu_ver_file/",mcu_svn_path.c_str(),contry.c_str(),mcu_ver_num.c_str());
+    sprintf(cmd,"svn checkout --username guopenghui --password CX.gph2024 \"%s%s/%s\" /home/cx/auto_test_test/mcu_ver_file/",mcu_svn_path.c_str(),contry.c_str(),mcu_ver_num.c_str());
     // std::cout <<cmd<<std::endl;
     int status = system(cmd);
     if(status)
@@ -249,7 +249,7 @@ int mcu_update_t::push_bin_update()
     char cmd[256] = {0};
     char out[128] = {0};
     FILE *f = nullptr;
-    f = popen("ls /home/cx/version_base_test/mcu_ver_file","r");
+    f = popen("ls /home/cx/auto_test_test/mcu_ver_file","r");
     if(fgets(out,128,f) > (char*)0)
     {
         for(int i = 0;i < 128;++i)
@@ -260,7 +260,7 @@ int mcu_update_t::push_bin_update()
                 break;
             }
         }
-        sprintf(cmd,"adb push /home/cx/version_base_test/mcu_ver_file/%s /usrdata/ota",out);
+        sprintf(cmd,"adb push /home/cx/auto_test_test/mcu_ver_file/%s /usrdata/ota",out);
     }
     pclose(f);
     
@@ -277,7 +277,7 @@ int mcu_update_t::push_bin_update()
 int mcu_update_t::get_update_package_name()
 {
     char out[128] = {0};
-    FILE *f = popen("ls /home/cx/version_base_test/mcu_ver_file/","r");
+    FILE *f = popen("ls /home/cx/auto_test_test/mcu_ver_file/","r");
     if(fgets(out,128,f) > (char*)0)
     {
         update_package_name = out;
@@ -406,7 +406,7 @@ int soc_update_t::update()
     get_update_package_path();
     if(false == update_package_path.empty())
     {
-        cmd = "/home/cx/version_base_test/shell/QFirehose -f " + update_package_path;
+        cmd = "/home/cx/auto_test_test/shell/QFirehose -f " + update_package_path;
         log_debug("update_package_path = %s",update_package_path.c_str());
     }
 

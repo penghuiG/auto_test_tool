@@ -241,7 +241,7 @@ int info_get(char * cmd)
 int main()
 {
     int i = 0;
-    log_init("/home/cx/version_base_test/time_sync_test.log");
+    log_init("/home/cx/auto_test_test/time_sync_test.log");
     power_manage_init();
     while(1)
     {

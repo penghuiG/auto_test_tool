@@ -15,7 +15,7 @@ if { [lindex $argv 2] == "" } {
 # 设置超时为无限等待
 set timeout -1
 
-spawn sudo /home/cx/version_base_test/build/version_base_test [lindex $argv 0] [lindex $argv 1] [lindex $argv 2]
+spawn sudo /home/cx/auto_test_test/build/auto_test_test [lindex $argv 0] [lindex $argv 1] [lindex $argv 2]
 
 expect {
     # 匹配包含"password"或用户名"cx"的提示

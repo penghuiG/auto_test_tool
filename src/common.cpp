@@ -17,7 +17,7 @@ int test_info_fprintf(char *msg,...)
     printf("%s",tmp_val);
     va_end(argp);
 
-    FILE *s_debug_fp = fopen("/home/cx/version_base_test/version_base_test.log","at+");
+    FILE *s_debug_fp = fopen("/home/cx/auto_test_test/auto_test_test.log","at+");
     fprintf(s_debug_fp,"%s",tmp_val );
     fclose(s_debug_fp);
 
@@ -25,6 +25,6 @@ int test_info_fprintf(char *msg,...)
 }
 void log_clear()
 {
-    FILE *fp = fopen("/home/cx/version_base_test/version_base_test.log","w");
+    FILE *fp = fopen("/home/cx/auto_test_test/auto_test_test.log","w");
     fclose(fp);
 }

@@ -14,7 +14,7 @@
 namespace fs = std::filesystem;
 
 const int PORT = 8080;
-const std::string WEB_ROOT = "/home/cx/version_base_test/http_server/public";
+const std::string WEB_ROOT = "/home/cx/auto_test_test/http_server/public";
 const std::string SERVER_NAME = "SimpleCppHttpServer/1.0";
 
 // MIME 类型映射

@@ -1,3 +1,0 @@
-/home/cx/version_base_test/http_server/CMakeFiles/https_server.dir
-/home/cx/version_base_test/http_server/CMakeFiles/edit_cache.dir
-/home/cx/version_base_test/http_server/CMakeFiles/rebuild_cache.dir

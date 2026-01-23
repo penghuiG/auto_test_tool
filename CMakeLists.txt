@@ -1,6 +1,6 @@
 cmake_minimum_required (VERSION 3.10)
  
-project (version_base_test)
+project (tsu_test)
 
 include_directories(. bsp bsp/can src)
 # ADDSOURCE_RECURSION(${CMAKE_CURRENT_SOURCE_DIR}/src)

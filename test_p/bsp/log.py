@@ -3,13 +3,13 @@
 import logging
 import time
 import os
-log_path = "~/version_base_test/test_p/log/"
+log_path = "~/auto_test_test/test_p/log/"
 
 # logger = logging.getLogger('tsu_test')
 def log_file_name():
     current_time = time.localtime()
     formatted_time = time.strftime("%Y-%m-%d-%H:%M:%S", current_time)
-    return '~/version_base_test/test_p/log/tsu_test_' + formatted_time + ".log"
+    return '~/auto_test_test/test_p/log/tsu_test_' + formatted_time + ".log"
 # 记录日志
 # logger.debug('这是一个 debug 级别的日志（仅写入文件）')
 # logger.info('这是一个 info 级别的日志（写入文件和控制台）')

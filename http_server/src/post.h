@@ -9,7 +9,7 @@
 #include <sys/socket.h>
 #include <unistd.h>         // close() 函数和read/write系列函数
 
-#define CONFIG_PATH_ROOT "/home/cx/version_base_test/conf"
+#define CONFIG_PATH_ROOT "/home/cx/auto_test_test/conf"
 
 namespace fs = std::filesystem;
 

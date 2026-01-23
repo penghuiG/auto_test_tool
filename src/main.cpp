@@ -32,7 +32,7 @@ int main(int argc, const char* argv[])
     adb_dev *adb = new adb_dev();
  
     log_clear();
-    log_init("/home/cx/version_base_test/version_base_test.log");
+    log_init("/home/cx/auto_test_test/auto_test_test.log");
     info_printf("**********test start**********\n");
 
     if(arg_init(argc,argv,soc,mcu) != 0)
