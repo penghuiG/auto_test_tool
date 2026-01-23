@@ -1,5 +1,4 @@
-#ifndef ADB_H_
-#define ADB_H_
+#pragma once
 #include "power_manage.h"
 // #include <string.h>
 // #include <stdio.h>
@@ -20,26 +19,16 @@ public:
     {
         power_gpio_set(1,1,1,1);
     }
-    bool is_connect;
-    // bool adb_is_connect();
-    int connect(int timeout);
+    bool connect(int timeout);
+    bool is_connect();
     int edl_enter();
     int edl_out();
+private:
+    bool adb_connected_flag;
 };
-// typedef struct _process_info
-// {
-//     char process_name[64][64];
-//     int err_process_num;
-// }process_info_t;
-// typedef enum{
-//     PROCESS_QUERY = 1,
-//     CALL_NUMBRE
-// }adb_operation_t;
 
-// extern process_info_t process_info;
 
 
 gl_status_t adb_shell_cmd(char * adb_cmd,adb_operation_t adb_operation);
 int edl_enter();
 int edl_out();
-#endif

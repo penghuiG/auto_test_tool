@@ -77,36 +77,40 @@ static gl_status_t process_query_func(char *input)
     // printf("-------------%d-------------\n",adb_result);
 }
 
-int adb_dev::connect(int timeout)
+bool adb_dev::connect(int timeout)
 {
-    int connect = 0;
+    bool connect_status = false;
     if(timeout < 0)
     {
-        return -1;
+        return connect_status;
     }
     while(timeout--)
     {
         if( 0 == system("adb root"))
         {
-            connect = 1;
-            is_connect = 1;
+            connect_status = true;
+            adb_connected_flag = true;
             break;
         }
         else
         {
-            is_connect = 0;
+            adb_connected_flag = false;
         }
         sleep(1);
     }
-    return connect;
+    return connect_status;
+}
+bool adb_dev::is_connect()
+{
+    return adb_connected_flag;
 }
 adb_dev::adb_dev()
 {
-    is_connect = 0;
+    adb_connected_flag = false;
 }
 int adb_dev::edl_enter()
 {
-    int adb_connected_flag = 0;
+    bool adb_connected_flag = false;
     adb_connected_flag = connect(30);
     if(!adb_connected_flag )
     {
