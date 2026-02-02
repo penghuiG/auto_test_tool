@@ -16,7 +16,7 @@ float moving_average_get(float xn)
   static float sum = 0;
   float yn = 0;
   int i = 0;
-  if(index == -1)
+  if (index == -1)
   {
 
     for(i = 0; i <MOVE_LENGTH; i++)
@@ -32,7 +32,7 @@ float moving_average_get(float xn)
     buffer[index] = xn;
     sum += xn;
     index++;
-    if(index >= MOVE_LENGTH)
+    if (index >= MOVE_LENGTH)
     {
       index = 0;
     }
@@ -54,7 +54,7 @@ void get_curent_hander()
     {
         current1 = ina1->getCurrent_mA();               // current in mA
 
-        // printf("Current:%6.2f ma\r\n",current1);  
+        // printf("Current:%6.2f ma\r\n", current1);  
         moving_curent =  moving_average_get(current1);
         usleep(100000);
     }
@@ -71,14 +71,14 @@ gl_status_t low_power_test()
      * 5、再次进入低功耗
      */
     info_printf("\n-> low power test\n");
-    while(1)
+    while (1)
     {
-        if(system("adb root") == 0)
+        if (system("adb root") == 0)
         {
             break;
         }
         sleep(1);
-        if(timer ++ > 40)
+        if (timer ++ > 40)
         {
             log_error("The tsu timeout is not started");
             return GL_STATE_FAIL;
@@ -86,18 +86,18 @@ gl_status_t low_power_test()
         }
     }
     timer = 0;
-    power_gpio_set(1,0,0,0);
+    power_gpio_set(1, 0, 0, 0);
     log_debug("ACC|IG|USB_OPWER off\n");
     log_debug("Waiting to enter low-power mode......\n");
-    while(1)
+    while (1)
     {
         sleep(1);
-        if(moving_curent < 5)
+        if (moving_curent < 5)
         {
             log_debug("Successfully entered low-power mode\n");
             break;
         }
-        if(timer ++ > 600)
+        if (timer ++ > 600)
         {
             log_error("Enter the low-power timeout\n");
 
@@ -106,18 +106,18 @@ gl_status_t low_power_test()
     }
     timer = 0;
     sleep(120);
-    power_gpio_set(1,1,1,1);
+    power_gpio_set(1, 1, 1, 1);
     log_debug("ACC|IG|USB_OPWER on\n");
     log_debug("Waiting to exit low-power mode......\n");
-    while(1)
+    while (1)
     {
         sleep(1);
-        if(system("adb root") == 0)
+        if (system("adb root") == 0)
         {
             log_debug("SOC successfully awakened\n");
             break;
         }
-        if(timer ++ > 5)
+        if (timer ++ > 5)
         {
             log_error("Failed to exit the low-power consumption\n");
              return GL_WEAKUP_FAIL;
@@ -133,21 +133,21 @@ gl_status_t low_power_test()
 // #define GPIO_USB_POWER 22
 void power_restart()
 {
-    gpio_write(GPIO_B,GPIO_ON);
-    gpio_write(GPIO_IG,GPIO_ON);
-    gpio_write(GPIO_ACC,GPIO_ON);
-    gpio_write(GPIO_USB_POWER,GPIO_ON);
+    gpio_write(GPIO_B, GPIO_ON);
+    gpio_write(GPIO_IG, GPIO_ON);
+    gpio_write(GPIO_ACC, GPIO_ON);
+    gpio_write(GPIO_USB_POWER, GPIO_ON);
     sleep(2);
-    gpio_write(GPIO_B,GPIO_OFF);
-    gpio_write(GPIO_IG,GPIO_OFF);
-    gpio_write(GPIO_ACC,GPIO_OFF);
-    gpio_write(GPIO_USB_POWER,GPIO_OFF);
+    gpio_write(GPIO_B, GPIO_OFF);
+    gpio_write(GPIO_IG, GPIO_OFF);
+    gpio_write(GPIO_ACC, GPIO_OFF);
+    gpio_write(GPIO_USB_POWER, GPIO_OFF);
     log_debug("Power off and restart\n");
 }
 gl_status_t is_lpm_status()
 {
     // std::cout << moving_curent << "ma" << std::endl;
-    if(moving_curent <= 5.0)
+    if (moving_curent <= 5.0)
     {
         return GL_STATE_OK;
     }

@@ -16,22 +16,22 @@ void requestHandling(const int client_sockfd, const struct sockaddr_in& client_a
         sizeof(ipbuf)), ntohs(client_addr.sin_port));
 
     char buf[buffer_size];
-    while(1) 
+    while (1) 
     {
 
-        int len = recv(client_sockfd, buf, sizeof(buf),flag);
+        int len = recv(client_sockfd, buf, sizeof(buf), flag);
         if (len == -1)
         {
             close(client_sockfd);
             perror("read error");
-        }else if(len == 0)
+        }else if (len == 0)
         {
             break;
         }
-        send(client_sockfd,buf,strlen(buf),0);
+        send(client_sockfd, buf, strlen(buf), 0);
         std::cout<<buf<<std::endl;
 
-        memset(buf,'\0',len);
+        memset(buf, '\0', len);
     }
     close(client_sockfd);
 
@@ -39,23 +39,23 @@ void requestHandling(const int client_sockfd, const struct sockaddr_in& client_a
 #endif
 void recive_handle(const int sockefd){
     char buf[buffer_size];
-    while(1) 
+    while (1) 
     {
 
-        int len = recv(sockefd, buf, sizeof(buf),flag);
+        int len = recv(sockefd, buf, sizeof(buf), flag);
         if (len == -1)
         {
             close(sockefd);
             // close(server_sockfd);
             perror("read error");
-        }else if(len == 0)
+        }else if (len == 0)
         {
             break;
         }
-        send(sockefd,buf,strlen(buf),0);
+        send(sockefd, buf, strlen(buf), 0);
         std::cout<<buf<<std::endl;
 
-        memset(buf,'\0',len);
+        memset(buf, '\0', len);
     }
     close(sockefd);
 }
@@ -73,7 +73,7 @@ int connect_to_server(const char* serverIp, int serverPort) {
     serverAddr.sin_family = AF_INET;
     serverAddr.sin_port = htons(serverPort);
     
-    if(inet_pton(AF_INET, serverIp, &serverAddr.sin_addr)<=0) {
+    if (inet_pton(AF_INET, serverIp, &serverAddr.sin_addr)<=0) {
         std::cerr << "Invalid address/ Address not supported" << std::endl;
         close(sock);
         return -1;
@@ -105,15 +105,15 @@ bool check_connection(int socket_fd) {
 // 重新连接的函数
 void reconnect(const std::string& server, int port) {
     // 重连逻辑
-    connect_to_server(server.c_str(),port);
+    connect_to_server(server.c_str(), port);
     // std::cout << "Attempting to reconnect..." << std::endl;
 }
 
 // 主函数，用于定时检测和重新连接
 void monitor_and_reconnect(const std::string& server, int port) {
     // while (true) {
-    //     if (!check_connection(server,port)) {
-    //         reconnect(server,port);
+    //     if (!check_connection(server, port)) {
+    //         reconnect(server, port);
     //     }
     //     std::this_thread::sleep_for(std::chrono::seconds(5));
     // }

@@ -13,9 +13,9 @@ static gl_status_t popen_data_get(std::string cmd)
 {
     char buffer[512];
     FILE* fp = nullptr;
-    fp = popen(cmd.c_str(),"r");
+    fp = popen(cmd.c_str(), "r");
     while (fgets(buffer, sizeof(buffer), fp) != nullptr) {
-         log_debug("%s",buffer);
+         log_debug("%s", buffer);
     }
     pclose(fp);
     return GL_STATE_OK;
@@ -40,7 +40,7 @@ gl_status_t timing_test()
 gl_status_t reflash_test()
 {
     info_printf("\n-> reflash test\n");
-    if(system("adb shell \"ls /proc/recoveryinfo\"") != 0)
+    if (system("adb shell \"ls /proc/recoveryinfo\"") != 0)
     {
         log_error("tsu_reflash err");
         return GL_STATE_FAIL;
@@ -53,23 +53,23 @@ gl_status_t reflash_test()
 gl_status_t daq_test()
 {
     info_printf("\n-> daq test\n");
-    if(system("adb shell \"ps | grep oemapp/bin/daq | grep -v grep\""))
+    if (system("adb shell \"ps | grep oemapp/bin/daq | grep -v grep\""))
     {
         log_error("DAQ No startup");
         return GL_STATE_FAIL;
     }
-    if(system("adb shell \"ls -l /usrdata/sqlite/daq_applied.db\""))
+    if (system("adb shell \"ls -l /usrdata/sqlite/daq_applied.db\""))
     {
         log_error("The daq applied.db file is missing");
     }
-    if(system("adb shell \"rm -rf /usrdata/sqlite/upload/* \"") == 0)
+    if (system("adb shell \"rm -rf /usrdata/sqlite/upload/* \"") == 0)
     {
         
-        gpio_write(GPIO_IG,1);
+        gpio_write(GPIO_IG, 1);
         sleep(2);
-        gpio_write(GPIO_IG,0);
+        gpio_write(GPIO_IG, 0);
         sleep(30);
-        if(system("adb shell \"ls -l /usrdata/sqlite/upload/ |grep .EOF\""))
+        if (system("adb shell \"ls -l /usrdata/sqlite/upload/ |grep .EOF\""))
         {
             log_error("DAQ is not working properly");
             return GL_STATE_FAIL;
@@ -84,10 +84,10 @@ gl_status_t ecall_test()
 {
     char out[128] = {0};
     info_printf("\n-> ecall test\n");
-    FILE *f = popen("adb shell \"cat /etc/ecall_version_*\"","r");
-    if(fgets(out,128,f) > (char*)0)
+    FILE *f = popen("adb shell \"cat /etc/ecall_version_*\"", "r");
+    if (fgets(out, 128, f) > (char*)0)
     {
-        log_debug("%s",out);
+        log_debug("%s", out);
     }
     else
     {
@@ -104,48 +104,48 @@ gl_status_t cellular_test()
     FILE *fp = NULL;
     char buf[128] = {0};
     info_printf("\n-> cellular test\n");
-    if(system("adb shell \"ps | grep oemapp/bin/cellular | grep -v grep\""))
+    if (system("adb shell \"ps | grep oemapp/bin/cellular | grep -v grep\""))
     {
         log_error("cellular No startup");
         return GL_STATE_FAIL;
     }
 
-    fp = popen("adb shell \"cat /usrdata/conf/tsu_part_num.txt\"","r");
-    if(fgets(buf,sizeof(buf),fp)>(char*)0)
+    fp = popen("adb shell \"cat /usrdata/conf/tsu_part_num.txt\"", "r");
+    if (fgets(buf, sizeof(buf), fp)>(char*)0)
     {
-        log_debug("tsu_part_num: %s",buf);
-        if(strncmp("8B100-3BWT-COMM-M1",buf,sizeof("8B100-3BWT-COMM-M1")-1))
+        log_debug("tsu_part_num: %s", buf);
+        if (strncmp("8B100-3BWT-COMM-M1", buf, sizeof("8B100-3BWT-COMM-M1")-1))
         {
             log_error("cat tsu_part_num.txt err != 8B100-3BWT-COMM-M1");
             return GL_STATE_FAIL;
         }
     }
 
-    if(system("adb shell \"ifconfig | grep rmnet_data\""))
+    if (system("adb shell \"ifconfig | grep rmnet_data\""))
     {
         log_error("The dial status is wrong");
         return GL_STATE_FAIL;
     }
 
-    memset(buf,0,sizeof(buf));
-    FILE *f1 = popen("adb shell \"cat /data/run_info/cert_cn.txt\"","r");
-    if(fgets(buf,sizeof(buf),f1))
+    memset(buf, 0, sizeof(buf));
+    FILE *f1 = popen("adb shell \"cat /data/run_info/cert_cn.txt\"", "r");
+    if (fgets(buf, sizeof(buf), f1))
     {
-        log_debug("cert_cn: %s",buf);
+        log_debug("cert_cn: %s", buf);
     }
     pclose(f1);
-    memset(buf,0,sizeof(buf));
-    FILE *f2 = popen("adb shell \"cat /data/run_info/iccid.txt\"","r");
-    if(fgets(buf,sizeof(buf),f2))
+    memset(buf, 0, sizeof(buf));
+    FILE *f2 = popen("adb shell \"cat /data/run_info/iccid.txt\"", "r");
+    if (fgets(buf, sizeof(buf), f2))
     {
-        log_debug("iccid: %s",buf);
+        log_debug("iccid: %s", buf);
     }
     pclose(f2);
-    memset(buf,0,sizeof(buf));
-    FILE *f3 = popen("adb shell \"cat /data/run_info/imei.txt\"","r");
-    if(fgets(buf,sizeof(buf),f3))
+    memset(buf, 0, sizeof(buf));
+    FILE *f3 = popen("adb shell \"cat /data/run_info/imei.txt\"", "r");
+    if (fgets(buf, sizeof(buf), f3))
     {
-        log_debug("imei: %s",buf);
+        log_debug("imei: %s", buf);
     }
     pclose(f3);
 

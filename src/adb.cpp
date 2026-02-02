@@ -82,13 +82,13 @@ adb_dev::adb_dev()
 bool adb_dev::connect(int timeout)
 {
     bool connect_status = false;
-    if(timeout < 0)
+    if (timeout < 0)
     {
         return connect_status;
     }
-    while(timeout--)
+    while (timeout--)
     {
-        if( 0 == system("adb root"))
+        if ( 0 == system("adb root"))
         {
             connect_status = true;
             adb_connected_flag = true;

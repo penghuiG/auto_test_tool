@@ -9,7 +9,7 @@ int tsu_info_entry::info_get()
 {
     char out[POPEN_READ_LEN] = {0};
     fp = popen(info_get_cmd.c_str(),"r");
-    while(fgets(out,POPEN_READ_LEN,fp) > (char*)0)
+    while (fgets(out,POPEN_READ_LEN,fp) > (char*)0)
     {
         
         data = out;

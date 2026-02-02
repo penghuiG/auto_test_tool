@@ -8,50 +8,50 @@ void power_manage_init()
 {
     fd = wiringPiI2CSetup(DEVICE_ADDR);
 }
-void gpio_write(int pin,int val)
+void gpio_write(int pin, int val)
 {
-    if(pin < 0 || val < 0)
+    if (pin < 0 || val < 0)
     {
         return;
     }
     wiringPiI2CWriteReg8(fd, pin, val);
 }
-void power_gpio_set(int bat,int ig,int acc,int usb)
+void power_gpio_set(int bat, int ig, int acc, int usb)
 {
-    if(bat)
+    if (bat)
     {
-        gpio_write(GPIO_B,GPIO_OFF);
+        gpio_write(GPIO_B, GPIO_OFF);
     }
     else
     {
-        gpio_write(GPIO_B,GPIO_ON); 
+        gpio_write(GPIO_B, GPIO_ON); 
     }
 
-    if(ig)
+    if (ig)
     {
-        gpio_write(GPIO_IG,GPIO_OFF);
+        gpio_write(GPIO_IG, GPIO_OFF);
     }
     else
     {
-        gpio_write(GPIO_IG,GPIO_ON); 
+        gpio_write(GPIO_IG, GPIO_ON); 
     }
 
-    if(acc)
+    if (acc)
     {
-        gpio_write(GPIO_ACC,GPIO_OFF);
+        gpio_write(GPIO_ACC, GPIO_OFF);
     }
     else
     {
-        gpio_write(GPIO_ACC,GPIO_ON); 
+        gpio_write(GPIO_ACC, GPIO_ON); 
     }
 
-    if(usb)
+    if (usb)
     {
-        gpio_write(GPIO_USB_POWER,GPIO_OFF);
+        gpio_write(GPIO_USB_POWER, GPIO_OFF);
     }
     else
     {
-        gpio_write(GPIO_USB_POWER,GPIO_ON); 
+        gpio_write(GPIO_USB_POWER, GPIO_ON); 
     }
 }
 

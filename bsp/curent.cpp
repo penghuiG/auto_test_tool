@@ -9,7 +9,7 @@
 void INA219::wireWriteRegister(uint8_t reg, uint16_t value) {
 	
 
-  wiringPiI2CWriteReg16(i2c_fd,reg,value);
+  wiringPiI2CWriteReg16(i2c_fd, reg, value);
   
 }
 
@@ -22,7 +22,7 @@ void INA219::wireWriteRegister(uint8_t reg, uint16_t value) {
  */
 void INA219::wireReadRegister(uint8_t reg, uint16_t *value) {
 
-  *value = wiringPiI2CReadReg16(i2c_fd,reg);
+  *value = wiringPiI2CReadReg16(i2c_fd, reg);
 
 }
 
@@ -34,7 +34,7 @@ void INA219::wireReadRegister(uint8_t reg, uint16_t *value) {
  *  @note   These calculations assume a 0.1 ohm resistor is present
  */
 void INA219::setCalibration_32V_2A() {
-  // By default we use a pretty huge range for the input voltage,
+  // By default we use a pretty huge range for the input voltage, 
   // which probably isn't the most appropriate choice for system
   // that don't use a lot of power.  But all of the calculations
   // are shown below if you want to change the settings.  You will
@@ -56,7 +56,7 @@ void INA219::setCalibration_32V_2A() {
   // MinimumLSB = MaxExpected_I/32767
   // MinimumLSB = 0.000061              (61uA per bit)
   // MaximumLSB = MaxExpected_I/4096
-  // MaximumLSB = 0,000488              (488uA per bit)
+  // MaximumLSB = 0, 000488              (488uA per bit)
 
   // 4. Choose an LSB between the min and max values
   //    (Preferrably a roundish number close to MinLSB)
@@ -138,7 +138,7 @@ void INA219::powerSave(bool on) {
  *  @note   These calculations assume a 0.1 ohm resistor is present
  */
 void INA219::setCalibration_32V_1A() {
-  // By default we use a pretty huge range for the input voltage,
+  // By default we use a pretty huge range for the input voltage, 
   // which probably isn't the most appropriate choice for system
   // that don't use a lot of power.  But all of the calculations
   // are shown below if you want to change the settings.  You will
@@ -460,8 +460,8 @@ float INA219::getPower_mW() {
 //   {
 //     current1 = ina1->getCurrent_mA();               // current in mA
 
-// 		// printf("PSU Voltage:%6.3fV    Shunt Voltage:%9.6fV    Load Voltage:%6.3fV    Power:%9.6fW    Current:%9.6fA\r\n",(bus_voltage1 + shunt_voltage1),(shunt_voltage1),(bus_voltage1),(power1),(current1));
-// 		printf("Current:%6.2f ma\r\n",current1);  
+// 		// printf("PSU Voltage:%6.3fV    Shunt Voltage:%9.6fV    Load Voltage:%6.3fV    Power:%9.6fW    Current:%9.6fA\r\n", (bus_voltage1 + shunt_voltage1), (shunt_voltage1), (bus_voltage1), (power1), (current1));
+// 		printf("Current:%6.2f ma\r\n", current1);  
 
 //     printf("\r\n");
 // 		printf("\r\n");

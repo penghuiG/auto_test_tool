@@ -24,7 +24,7 @@ volatile int exit_code = 0;
 #if 0
 int main(int argc, const char* argv[])
 {
-    int sec = 0,ser_cnt = 0;
+    int sec = 0, ser_cnt = 0;
     int can_tx_flag = true;
     soc_update_t *soc = new soc_update_t();
     mcu_update_t *mcu = new mcu_update_t();
@@ -35,14 +35,14 @@ int main(int argc, const char* argv[])
     log_init("/home/cx/auto_test_test/auto_test_test.log");
     info_printf("**********test start**********\n");
 
-    if(arg_init(argc,argv,soc,mcu) != 0)
+    if (arg_init(argc, argv, soc, mcu) != 0)
     {
         log_error("Input parameter processing error");
         return -1;
     }
 
     power_manage_init();
-    power_gpio_set(1,1,1,1);
+    power_gpio_set(1, 1, 1, 1);
 #ifdef TEST_FLAG
     float haha = get_current((char *)"1000159");
     std::cout<<haha<<std::endl;
@@ -51,20 +51,20 @@ int main(int argc, const char* argv[])
 #ifdef UPDATE_5G_FLAG
 
     info_printf("\n-> Upgrade SOC\n");
-    if(system("lsusb | grep 9008") != 0)
+    if (system("lsusb | grep 9008") != 0)
     {
         adb->edl_enter();
     }
     system("ifconfig can0 txqueuelen 65536");
     std::thread curetn_thread(get_curent_hander);
     curetn_thread.detach();
-    std::thread can_thread(tsu_program_mode,can_tx_flag);
+    std::thread can_thread(tsu_program_mode, can_tx_flag);
     can_thread.detach();
     log_debug("Start upgrading SOC\n");
     int cnt = 3;
-    while(cnt--)
+    while (cnt--)
     {
-        if(soc->update() ==0 )
+        if (soc->update() ==0 )
         {
             break;
         } 
@@ -72,7 +72,7 @@ int main(int argc, const char* argv[])
         sleep(20);
     }
     can_tx_flag = false;
-    // if(system("lsusb | grep 9008") == 0)
+    // if (system("lsusb | grep 9008") == 0)
     // {
     //     adb->edl_out();
     // }
@@ -81,8 +81,8 @@ int main(int argc, const char* argv[])
 #ifdef UPDATE_MCU_FLAG
 
     info_printf("\n-> Upgrade MCU\n");
-    //120秒钟连不上adb,直接退出
-    if(adb->connect(120) < 0)
+    //120秒钟连不上adb, 直接退出
+    if (adb->connect(120) < 0)
     {
         log_error("Adb connection timeout");
         return -1;
@@ -97,9 +97,9 @@ int main(int argc, const char* argv[])
     wait_in_place(120);
     adb->connect(120);
     
-    while(ser_cnt < 30)
+    while (ser_cnt < 30)
     {
-        if(mcu->update_sertification() == 0)
+        if (mcu->update_sertification() == 0)
         {
             goto exit_mcu_update;
         }
@@ -120,17 +120,17 @@ exit_mcu_update:
     uart->get_dev_name_by_id();
     int uart_fd = uart->uart_init();
     
-    if(uart_fd > 0)
+    if (uart_fd > 0)
     {
-        std::thread uartThread(uartHandler,uart_fd);
+        std::thread uartThread(uartHandler, uart_fd);
         uartThread.detach();
     } 
 #endif
 #if 1
-    if(adb->is_connect)
+    if (adb->is_connect)
     {
         
-        // if(soc_update_flag||mcu_update_flag)
+        // if (soc_update_flag||mcu_update_flag)
         //     wait_in_place(30);
         soc->get_cur_version();
         mcu->get_cur_version();
@@ -145,7 +145,7 @@ exit_mcu_update:
 
         // cellular_test();
         info_printf("\n-> program startup status test\n");
-        adb_shell_cmd((char *)"ls /oemapp/bin",PROCESS_QUERY);
+        adb_shell_cmd((char *)"ls /oemapp/bin", PROCESS_QUERY);
 
         low_power_test();
         
@@ -157,12 +157,12 @@ exit_mcu_update:
     delete adb;
     // delete uart;
     log_close();
-    power_gpio_set(1,1,1,1);
+    power_gpio_set(1, 1, 1, 1);
 
     exit_code = 1;
     for(;;)
     {
-        if(exit_code != 0)
+        if (exit_code != 0)
         {
             break;
         }

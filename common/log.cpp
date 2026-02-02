@@ -10,31 +10,31 @@ static FILE *s_debug_fp = NULL;
 //   struct tm *tm       = NULL;
   
 //   tm = localtime(&current_time);
-//   sprintf(p_time,"%04d-%02d-%02d %02d:%02d:%02d ",tm->tm_year + 1900, tm->tm_mon + 1, tm->tm_mday, 
+//   sprintf(p_time, "%04d-%02d-%02d %02d:%02d:%02d ", tm->tm_year + 1900, tm->tm_mon + 1, tm->tm_mday, 
 //     (tm->tm_hour+8)%24, tm->tm_min, tm->tm_sec);
 //   return 0;
   
 // }
 
-// int _out_log(int save,char *msg,...)
+// int _out_log(int save, char *msg, ...)
 // {
 //   va_list argp;
 //   // char* msg ;
-//   // strcpy(msg,_msg.c_str());
+//   // strcpy(msg, _msg.c_str());
 //   va_start( argp, msg );
 //   char *p_start = NULL;
 //   char tmp_val[LOG_MAX_LEN] = {0};
 //   _cur_time_string_get(tmp_val);
   
 //   p_start = tmp_val + strlen(tmp_val);
-//   vsnprintf(p_start,LOG_MAX_LEN - strlen(tmp_val), msg,argp);
-//   printf("%s",tmp_val);
+//   vsnprintf(p_start, LOG_MAX_LEN - strlen(tmp_val), msg, argp);
+//   printf("%s", tmp_val);
 //   va_end(argp);
   
-//   if( save )
+//   if ( save )
 //   {
-//     s_debug_fp = fopen("./version_base_test.log","at+");
-//     fprintf(s_debug_fp,"%s",tmp_val );
+//     s_debug_fp = fopen("./version_base_test.log", "at+");
+//     fprintf(s_debug_fp, "%s", tmp_val );
 //     fclose(s_debug_fp);
 //   }
 //   return 0;
@@ -70,7 +70,7 @@ void log_internal(LogLevel level, const char *format, ...) {
     struct tm *tm       = NULL;
   
     tm = localtime(&current_time);
-    sprintf(time_str,"%04d-%02d-%02d %02d:%02d:%02d",tm->tm_year + 1900, tm->tm_mon + 1, tm->tm_mday, 
+    sprintf(time_str, "%04d-%02d-%02d %02d:%02d:%02d", tm->tm_year + 1900, tm->tm_mon + 1, tm->tm_mday, 
       (tm->tm_hour)%24, tm->tm_min, tm->tm_sec);
 //
     const char *level_str;
@@ -100,10 +100,10 @@ void log_internal(LogLevel level, const char *format, ...) {
 }
 void wait_in_place(int time)
 {
-  if(time <= 0)
+  if (time <= 0)
   {
     return ;
   }
-//   log_debug("Wait for %d seconds\n",time);
+//   log_debug("Wait for %d seconds\n", time);
   sleep(time);
 }

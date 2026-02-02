@@ -89,7 +89,7 @@ gl_status_t lpm_judgment(int row)
     int time_out = get_int_from_xlxs(row, config_col::TIMEOUT_COL);
     while (--time_out)
     {
-        if(is_lpm_status() == GL_STATE_OK) {
+        if (is_lpm_status() == GL_STATE_OK) {
             std::cout << "Successfully entered low-power mode" << std::endl;
             break;
         }
@@ -172,7 +172,7 @@ gl_status_t power_callback(std::string& ct, int row)
     std::string gpio_name = get_str_from_xlxs(row, config_col::COMMAND_COL);
     std::string target = get_str_from_xlxs(row, config_col::TARGET_COL);
     std::cout << "gpio_name: " << gpio_name << " target: " << target <<std::endl;
-    // if(gpio_name.find(pwr_command::BAT) != std::string::npos)
+    // if (gpio_name.find(pwr_command::BAT) != std::string::npos)
     // {
         
         pwr_gpio_ctr(gpio_name, target, row);
@@ -187,7 +187,7 @@ gl_status_t command_callback(std::string& ct, int row)
     std::string get_str;
     try {
         std::unique_ptr<FILE, decltype(&pclose)> pipe(
-            popen(cmd.c_str(), "r"),
+            popen(cmd.c_str(), "r"), 
             &pclose
         );
 
@@ -234,11 +234,11 @@ gl_status_t flow_execute() {
             }
             continue;
         }
-        if(command_type.find("power") != std::string::npos)
+        if (command_type.find("power") != std::string::npos)
         {
             power_callback(command_type, row);
         }
-        if(command_type.find("command") != std::string::npos)
+        if (command_type.find("command") != std::string::npos)
         {
             command_callback(command_type, row);
         }
