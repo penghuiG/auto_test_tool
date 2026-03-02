@@ -12,7 +12,7 @@
 #include "can_operation.h"
 #include "mode_test.h"
 #include "tsu_info.h"
-
+#include "thread_pool.h"
 // #define UART_FLAG
 #define UPDATE_5G_FLAG
 #define UPDATE_MCU_FLAG
@@ -174,8 +174,9 @@ exit_mcu_update:
 #include "xlxs_opt.h"
 int main()
 {
-    std::thread curetn_thread(get_curent_hander);
-    curetn_thread.detach();
-    power_manage_init();
-    ReadWithOpenXLSX();
+    // std::thread curent_thread(get_curent_hander);
+    // curent_thread.detach();
+    // power_manage_init();
+    // ReadWithOpenXLSX();
+    tread_pool_sample();
 }
