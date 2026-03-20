@@ -81,7 +81,7 @@ gl_status_t low_power_test()
         if (timer ++ > 40)
         {
             log_error("The tsu timeout is not started");
-            return GL_STATE_FAIL;
+            return GL_STATE_FAILED;
             
         }
     }
@@ -151,5 +151,5 @@ gl_status_t is_lpm_status()
     {
         return GL_STATE_OK;
     }
-    return GL_STATE_FAIL;
+    return GL_STATE_FAILED;
 }

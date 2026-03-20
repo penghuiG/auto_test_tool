@@ -104,7 +104,7 @@ gl_status_t lpm_out(int row) {
     int time_out = get_int_from_xlxs(row, config_col::TIMEOUT_COL);
     adb_dev adb;
     if (!adb.connect(time_out)){
-        ret = GL_STATE_FAIL;
+        ret = GL_STATE_FAILED;
         std::cout << "Failed to successfully exit low-power mode" << std::endl;
     } else {
         std::cout << "Successfully to successfully exit low-power mode" << std::endl;
@@ -120,7 +120,7 @@ gl_status_t adb_connect(int row) {
     int is_connected = adb.connect(time_out);
     if (!is_connected) {
         std::cout << "Adb connection failed" << std::endl;
-        ret = GL_STATE_FAIL;
+        ret = GL_STATE_FAILED;
     }
     
     return ret;
@@ -136,7 +136,7 @@ gl_status_t wait_for_some_time(int row)
 
 gl_status_t pwr_gpio_ctr(std::string gpio, std::string sta, int row)
 {
-    gl_status_t status = GL_STATE_FAIL;
+    gl_status_t status = GL_STATE_FAILED;
     int gpio_sta = sta.find("ON") != std::string::npos ? GPIO_OFF : GPIO_ON;//如果OFF，继电器置位，断开电源
     if (gpio.find(pwr_command::BAT) != std::string::npos) {
         gpio_write(GPIO_B, gpio_sta);
@@ -209,13 +209,13 @@ gl_status_t command_callback(std::string& ct, int row)
                 return GL_STATE_OK;
             }
             else {
-                return GL_STATE_FAIL;
+                return GL_STATE_FAILED;
             }
         }
             
         } catch (const std::exception& e) {
             std::cout << (std::string("Instruction execution failed: ") + e.what()) << std::endl;
-            return GL_STATE_FAIL;
+            return GL_STATE_FAILED;
     }
     return GL_STATE_OK;
 }

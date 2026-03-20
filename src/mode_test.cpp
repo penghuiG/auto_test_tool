@@ -30,7 +30,7 @@ gl_status_t timing_test()
     if (system(cmd.c_str()))
     {
         log_error("/tmp/ql_time_sync_record_flag not exit");
-        return GL_STATE_FAIL;
+        return GL_STATE_FAILED;
     }
 
     popen_data_get(cmd);
@@ -43,7 +43,7 @@ gl_status_t reflash_test()
     if (system("adb shell \"ls /proc/recoveryinfo\"") != 0)
     {
         log_error("tsu_reflash err");
-        return GL_STATE_FAIL;
+        return GL_STATE_FAILED;
     }
     log_debug("Reflash test successful");
     return GL_STATE_OK;
@@ -56,7 +56,7 @@ gl_status_t daq_test()
     if (system("adb shell \"ps | grep oemapp/bin/daq | grep -v grep\""))
     {
         log_error("DAQ No startup");
-        return GL_STATE_FAIL;
+        return GL_STATE_FAILED;
     }
     if (system("adb shell \"ls -l /usrdata/sqlite/daq_applied.db\""))
     {
@@ -72,7 +72,7 @@ gl_status_t daq_test()
         if (system("adb shell \"ls -l /usrdata/sqlite/upload/ |grep .EOF\""))
         {
             log_error("DAQ is not working properly");
-            return GL_STATE_FAIL;
+            return GL_STATE_FAILED;
         }
     }
 
@@ -93,7 +93,7 @@ gl_status_t ecall_test()
     {
         pclose(f);
         log_error("Unable to obtain ecall version");
-        return GL_STATE_FAIL;
+        return GL_STATE_FAILED;
     }
     pclose(f);
     return GL_STATE_OK;
@@ -107,7 +107,7 @@ gl_status_t cellular_test()
     if (system("adb shell \"ps | grep oemapp/bin/cellular | grep -v grep\""))
     {
         log_error("cellular No startup");
-        return GL_STATE_FAIL;
+        return GL_STATE_FAILED;
     }
 
     fp = popen("adb shell \"cat /usrdata/conf/tsu_part_num.txt\"", "r");
@@ -117,14 +117,14 @@ gl_status_t cellular_test()
         if (strncmp("8B100-3BWT-COMM-M1", buf, sizeof("8B100-3BWT-COMM-M1")-1))
         {
             log_error("cat tsu_part_num.txt err != 8B100-3BWT-COMM-M1");
-            return GL_STATE_FAIL;
+            return GL_STATE_FAILED;
         }
     }
 
     if (system("adb shell \"ifconfig | grep rmnet_data\""))
     {
         log_error("The dial status is wrong");
-        return GL_STATE_FAIL;
+        return GL_STATE_FAILED;
     }
 
     memset(buf, 0, sizeof(buf));

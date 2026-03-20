@@ -12,7 +12,7 @@
 enum gl_status_t
 {
     GL_STATE_OK,
-    GL_STATE_FAIL,
+    GL_STATE_FAILED,
     GL_NO_STARTUP,
     GL_SLEEP_FAIL,
     GL_WEAKUP_FAIL,

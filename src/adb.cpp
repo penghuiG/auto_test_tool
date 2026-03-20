@@ -9,7 +9,7 @@ gl_status_t adb_shell_cmd(char * adb_cmd,adb_operation_t adb_operation)
 {
     
     char cmd[ADB_CMD_LENGTH] = {0};
-    gl_status_t adb_result = GL_STATE_FAIL;
+    gl_status_t adb_result = GL_STATE_FAILED;
     char out[ADB_CMD_OUT_LENGTH] = {0};
     FILE *fp = NULL;
     int i =0,err_num = 0,is_cmd_ok = 0;
