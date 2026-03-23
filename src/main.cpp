@@ -1,3 +1,4 @@
+#if 0
 #include "uart.h"
 #include "update.h"
 #include <iostream>
@@ -180,3 +181,4 @@ int main()
     // ReadWithOpenXLSX();
     tread_pool_sample();
 }
+#endif

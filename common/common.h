@@ -53,5 +53,4 @@ extern process_info_t process_info;
 
 extern test_info_t test_info;
 
-void log_clear();
 int test_info_fprintf(char *msg,...);

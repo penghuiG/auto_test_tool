@@ -23,8 +23,3 @@ int test_info_fprintf(char *msg, ...)
 
   return 0;
 }
-void log_clear()
-{
-    FILE *fp = fopen("/home/cx/auto_test_test/auto_test_test.log", "w");
-    fclose(fp);
-}

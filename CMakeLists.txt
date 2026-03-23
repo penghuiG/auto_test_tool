@@ -27,8 +27,6 @@ target_include_directories(${PROJECT_NAME} PUBLIC
     services
     src
 )
-
-add_executable(low_power_test ${CMAKE_CURRENT_SOURCE_DIR}/sample/low_power_test.cpp)
 find_package(Threads REQUIRED)
 target_link_libraries(${PROJECT_NAME}
     Threads::Threads
@@ -37,8 +35,21 @@ target_link_libraries(${PROJECT_NAME}
     OpenXLSX
 )
 
+add_executable(low_power_test ${CMAKE_CURRENT_SOURCE_DIR}/sample/low_power_test.cpp)
+
 find_package(Threads REQUIRED)
 target_link_libraries(low_power_test
+    Threads::Threads
+    wiringPi
+    ${CMAKE_CURRENT_SOURCE_DIR}/bsp/can/libcontrolcan.so
+    OpenXLSX
+    ${PROJECT_NAME}
+)
+
+add_executable(emmc_test ${CMAKE_CURRENT_SOURCE_DIR}/sample/emmc_test.cpp)
+
+find_package(Threads REQUIRED)
+target_link_libraries(emmc_test
     Threads::Threads
     wiringPi
     ${CMAKE_CURRENT_SOURCE_DIR}/bsp/can/libcontrolcan.so

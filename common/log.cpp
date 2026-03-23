@@ -57,7 +57,15 @@ void log_close() {
         log_file = NULL;
     }
 }
-
+void log_clear(std::string filename)
+{
+    //判断文件是否存在
+    if (access(filename.c_str(), F_OK) == -1) {
+        return;
+    }
+    FILE *fp = fopen(filename.c_str(), "w");
+    fclose(fp);
+}
 void log_internal(LogLevel level, const char *format, ...) {
     // time_t now;
     // time(&now);

@@ -21,6 +21,7 @@ typedef enum {
 void wait_in_place(int time);
 void log_init(const char *filename);
 void log_close() ;
+void log_clear(std::string filename);
 void log_internal(LogLevel level, const char *format, ...) ;
 // 宏封装（简化调用）
 #define log_debug(fmt, ...)   log_internal(LOG_DEBUG, fmt, ##__VA_ARGS__)

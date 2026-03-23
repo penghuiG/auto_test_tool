@@ -1,4 +1,4 @@
-#include "emmc_test.h"
+#include "emmc.h"
 #include "log.h"
 #include "power_manage.h"
 #include "gpio.h"
