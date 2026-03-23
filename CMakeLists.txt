@@ -28,7 +28,7 @@ target_include_directories(${PROJECT_NAME} PUBLIC
     src
 )
 
-add_executable(low_power_test ${CMAKE_CURRENT_SOURCE_DIR}/sample/low_power/main.cpp)
+add_executable(low_power_test ${CMAKE_CURRENT_SOURCE_DIR}/sample/low_power_test.cpp)
 find_package(Threads REQUIRED)
 target_link_libraries(${PROJECT_NAME}
     Threads::Threads
