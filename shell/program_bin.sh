@@ -2,7 +2,7 @@
 
 #--------------------------------------------------
 #	program binfile, usage: ./program firmware.bin/hex
-#	chip:Atmel
+#	chip:s32k3系列
 #	start addr:0x00400000
 #--------------------------------------------------
 
