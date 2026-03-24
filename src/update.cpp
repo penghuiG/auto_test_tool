@@ -188,10 +188,9 @@ std::string mcu_update_t::check_mcu_new_ver()
     char local_ver[128];
     char cmd[512] = {0};
     
-    // f = popen("svn list --username guopenghui --password CX.gph2024 \"https://192.168.52.21/svn/Global5.0/9.baseline/MCU/03.For3BWT/For%20JP/\"|grep G26V0", "r");
-    // sprintf(cmd, "svn list --username guopenghui --password CX.gph2024 \"%s%s/\"|grep %s", mcu_svn_path.c_str(), contry.c_str(), version_header.c_str());
+
     snprintf(cmd, sizeof(cmd), 
-            "svn list --username guopenghui --password CX.gph2024 \"%s%s/\"|grep %s", 
+            "svn list --username xxxxxx --password xxxxxxxx \"%s%s/\"|grep %s", 
             mcu_svn_path.c_str(), 
             contry.c_str(), 
             version_header.c_str());
@@ -231,10 +230,8 @@ int mcu_update_t::download_mcu_new_ver()
     is_update_success = 0;
     std::string mcu_ver_num = check_mcu_new_ver();
     mcu_ver_num.pop_back();
-    // std::cout<< "The current latest version is:" << mcu_ver_num;
-    //svn checkout --username guopenghui --password CX.gph2024 "https://192.168.52.21/svn/Global5.0/9.baseline/MCU/03.For3BWT/For%20JP/G26V0.J02.23-B/" ./mcu_ver_file/
-    // sprintf(cmd, "svn checkout --username guopenghui --password CX.gph2024 \"https://192.168.52.21/svn/Global5.0/9.baseline/MCU/03.For3BWT/For%20JP/%s\" ./mcu_ver_file/", mcu_ver_num.c_str());
-    sprintf(cmd, "svn checkout --username guopenghui --password CX.gph2024 \"%s%s/%s\" /home/cx/auto_test_test/mcu_ver_file/", mcu_svn_path.c_str(), contry.c_str(), mcu_ver_num.c_str());
+
+    sprintf(cmd, "svn checkout --username xxxxxx --password xxxxxxxx \"%s%s/%s\" /home/cx/auto_test_test/mcu_ver_file/", mcu_svn_path.c_str(), contry.c_str(), mcu_ver_num.c_str());
     // std::cout <<cmd<<std::endl;
     int status = system(cmd);
     if (status)
@@ -281,7 +278,6 @@ int mcu_update_t::get_update_package_name()
     if (fgets(out, 128, f) > (char*)0)
     {
         update_package_name = out;
-        // std::cout << update_package_name <<std::endl;
         return 0;
     }
     return -1;
@@ -311,7 +307,6 @@ int mcu_update_t::update_sertification()
             return 0;
         }
     }
-    // log_error("MCU upgrade failed");
     fclose(f);
     return -1;
 }
@@ -344,13 +339,11 @@ int soc_update_t::download_update_package()
 
     sprintf(cmd, "curl -u \"develop:Develop.1234\" -X GET %s>./update_package/mode5g_package/%s\n", remote_address.c_str(), file_name.c_str());
 
-    // shell_open(cmd, shell_output, 1024);
     return system(cmd);
     
 }
 int soc_update_t::get_update_package_path()
 {
-    // update_package_path = "../DailyTest";
     update_package_path = "/home/cx/DailyTest/" + car_type + "/" +soc_hard_type;
     log_debug("car_type = %s", car_type.c_str());
     return 0;

@@ -70,7 +70,7 @@ gl_status_t low_power_test()
      * 4、链接acc|ig 唤醒
      * 5、再次进入低功耗
      */
-    info_printf("\n-> low power test\n");
+    log_debug("-> low power test\n");
     while (1)
     {
         if (system("adb root") == 0)

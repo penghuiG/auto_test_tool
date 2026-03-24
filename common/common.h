@@ -8,7 +8,6 @@
 #include <pthread.h>
 #include <iostream>
 #include <fstream>
-#define info_printf(msg,arg ...)  test_info_fprintf((char*)msg,## arg)
 enum gl_status_t
 {
     GL_STATE_OK,
@@ -53,4 +52,3 @@ extern process_info_t process_info;
 
 extern test_info_t test_info;
 
-int test_info_fprintf(char *msg,...);

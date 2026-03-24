@@ -25,7 +25,7 @@ gl_status_t timing_test()
 {
     char buffer[256];
     FILE* fp = nullptr;
-    info_printf("\n-> Time synchronization test\n");
+    log_debug("-> Time synchronization test\n");
     std::string cmd("adb shell \"cat /tmp/ql_time_sync_record_flag\"");
     if (system(cmd.c_str()))
     {
@@ -39,7 +39,7 @@ gl_status_t timing_test()
 /*REFLASH*/
 gl_status_t reflash_test()
 {
-    info_printf("\n-> reflash test\n");
+    log_debug("-> reflash test\n");
     if (system("adb shell \"ls /proc/recoveryinfo\"") != 0)
     {
         log_error("tsu_reflash err");
@@ -52,7 +52,7 @@ gl_status_t reflash_test()
 /*DAQ*/
 gl_status_t daq_test()
 {
-    info_printf("\n-> daq test\n");
+    log_debug("-> daq test\n");
     if (system("adb shell \"ps | grep oemapp/bin/daq | grep -v grep\""))
     {
         log_error("DAQ No startup");
@@ -83,7 +83,7 @@ gl_status_t daq_test()
 gl_status_t ecall_test()
 {
     char out[128] = {0};
-    info_printf("\n-> ecall test\n");
+    log_debug("-> ecall test\n");
     FILE *f = popen("adb shell \"cat /etc/ecall_version_*\"", "r");
     if (fgets(out, 128, f) > (char*)0)
     {
@@ -103,7 +103,7 @@ gl_status_t cellular_test()
 {
     FILE *fp = NULL;
     char buf[128] = {0};
-    info_printf("\n-> cellular test\n");
+    log_debug("-> cellular test\n");
     if (system("adb shell \"ps | grep oemapp/bin/cellular | grep -v grep\""))
     {
         log_error("cellular No startup");
