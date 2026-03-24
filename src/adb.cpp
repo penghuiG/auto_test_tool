@@ -4,7 +4,7 @@
 #include "power_manage.h"
 static gl_status_t process_query_func(char *input);
 
-// process_info_t process_info = {0};
+process_info_t process_info = {0};
 gl_status_t adb_shell_cmd(char * adb_cmd,adb_operation_t adb_operation)
 {
     
